@@ -1,0 +1,36 @@
+provider "aws" {
+  region     = "us-east-1"
+  access_key = ""
+  secret_key = ""
+}
+
+# To create EC2 instance
+resource "aws_instance" "myec2" {
+   ami = "ami-0b5eea76982371e91"
+   instance_type = "t2.micro"
+}
+
+# To create Elastic IP
+resource "aws_eip" "lb" {
+  vpc      = true
+}
+
+# To create security group and add ingress rule
+resource "aws_security_group" "satz_sg" {
+  name        = "Satz_Sg"
+  description = "Allow TLS inbound traffic"
+  
+  ingress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["${aws_eip.lb.public_ip}/32"]
+  }
+}
+
+
+# To Associate eip to Ec2
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.myec2.id
+  allocation_id = aws_eip.lb.id
+}

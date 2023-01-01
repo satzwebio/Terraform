@@ -1,0 +1,4 @@
+variable "varip" {
+    default = "127.120.120.99"
+  
+}

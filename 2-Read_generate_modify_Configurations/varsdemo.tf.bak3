@@ -1,0 +1,33 @@
+provider "aws" {
+  region     = "us-east-1"
+  access_key = ""
+  secret_key = ""
+}
+
+
+# To create security group and add ingress rule
+resource "aws_security_group" "satz_sg1" {
+  name        = "Satz_Sg1"
+  ingress {
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.varip}/32"]
+  }
+
+  ingress {
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.varip}/32"]
+  }
+
+ ingress {
+    from_port        = 53
+    to_port          = 53
+    protocol         = "tcp"
+    cidr_blocks      = ["${var.varip}/32"]
+  }
+}
+
+
